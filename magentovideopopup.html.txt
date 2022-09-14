@@ -1,0 +1,165 @@
+To Add a pop up video coming from other sources in magento2:
+--------------------------------------------------------------------
+1.Need to define a button with data-src attribute and that attribute should be made in the backend
+-------------------------------------------------------------------------------------------------------
+
+<?php if($_product->getVideoUrl()) { ?>
+     <button class="waterway-video" data-src="<?= $_product->getVideoUrl() ?>"><img src="<?php echo $block->getUrl("pub/media/wysiwyg/")?>play.png"/></button>
+ <?php } ?>
+
+
+2.define a videopopup div  below so that script cant be run at a time and it should not be loaded for each and every product item if it is done on the product listing page
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+<div id="video-info-popup" style="display:none;">
+    <iframe class="player" src="" width="100%" height="630" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="decobec.mp4"></iframe>
+</div>
+
+3.Write js code for the modal popup and do the styling for it
+--------------------------------------------------------------------
+<script>
+    require(
+    [
+       'jquery',
+       'Magento_Ui/js/modal/modal'
+    ],
+    function (
+       $,
+       modal
+    ) {
+        
+        $('body').on('click', '.waterway-video', function() {
+            
+            var src = $(this).attr("data-src");     
+            video1Popup(src);
+        });
+        function video1Popup(src) {
+            $(".player").attr("src",'https://player.vimeo.com/video/'+src+'?h=722d81db67&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479');
+            var modaloption = {
+               type: 'popup',
+               modalClass: 'video-popup',
+               responsive: true,
+               innerScroll: true,
+               clickableOverlay: true,
+               title: '',
+               buttons: false
+            };
+            var callforoption = modal(modaloption, $('#video-info-popup'));
+            $('#video-info-popup').modal('openModal');
+
+            $('.action-close').on('click', function() {
+                var video = $(".player").attr("src");
+                $(".player").attr("src","");
+                $(".player").attr("src",video);
+            })
+        }
+    });
+    
+</script>
+<style>
+
+    
+
+	.product-item:hover .waterway-video{
+		opacity:1;
+		visibility: visible;
+
+	}
+	.waterway-video{
+		opacity: 0;
+		width:36px;
+		height: 36px !important;
+		padding: 0 !important;
+
+	}
+    .video-popup #video-info-popup iframe{
+        height: 393px !important;
+    }
+    /* Popup */
+    .video-popup .modal-inner-wrap {
+        border-radius: 12px;
+        width: 1160px;
+    }
+
+    .video-popup .modal-header{
+        position: absolute;
+        right: 100px;
+        top: 30px;
+        background-color: transparent ;
+    }
+
+    .video-popup .modal-content {
+        overflow-y: hidden !important;
+    }
+
+    .video-popup .modal-header button,
+    .video-popup .modal-header button:focus{
+        border-radius: 50%;
+        background-color: #fff !important;
+        z-index: 999;
+    }
+
+    .video-popup .modal-header button::before{
+        color: #333 !important;
+    }
+
+    .video-popup .modal-content{
+        padding: 20px 10px;
+    }
+
+    @media(min-width: 769px) and (max-width: 1200px){
+        .video-popup .modal-inner-wrap {
+            border-radius: 12px;
+            width: 680px !important;
+            height: auto !important;
+            min-height: auto !important;
+            margin: auto !important;
+        }
+
+        .video-popup iframe{
+            height: 365px !important;
+        }
+    }
+
+
+    @media(max-width: 768px){
+        .video-popup .modal-header{
+            right: 40px;
+            top: 15px;
+        }
+
+        .video-popup .modal-header button::before{
+            width: 30px;
+            height: 30px;
+            line-height: 32px;
+        }
+
+        .video-popup .modal-content{
+            padding: 10px 0px 5px 0px;
+        }
+
+        .video-popup #video-info-popup iframe{
+            height: 190px !important;
+        }
+
+        .video-popup {
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 900;
+        }
+
+        .video-popup{
+            left: 15px;
+            right: 15px;
+        }
+
+        .video-popup .modal-inner-wrap {
+            height: auto;
+            min-height: auto !important;
+            width: 360px !important;
+            margin: auto !important;
+        }
+    }
+
+</style>
+
