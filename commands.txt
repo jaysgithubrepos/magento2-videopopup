@@ -1,0 +1,22 @@
+COMMANDS 
+
+•Run php on localhost without starting the xampp server
+php -S localhost:8080
+
+
+Magento commands to run after every Module build:
+
+php bin/magento setup:upgrade
+php bin/magento setup:di:compile
+php bin/magento s:s:d -f
+php bin/magento cache:flush
+sudo chmod -R 777 pub/ var/ generated/
+
+Magento commands to run to regenerate static files
+
+php bin/magento maintenance:enable
+rm -rf pub/static/*
+php -dmemory_limit=-1 bin/magento s:s:d -f en_US fr_FR
+sudo chmod -R 777 pub/ var/ generated/
+php bin/magento maintenance:disable
+
