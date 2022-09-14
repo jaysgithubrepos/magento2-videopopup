@@ -20,3 +20,8 @@ php -dmemory_limit=-1 bin/magento s:s:d -f en_US fr_FR
 sudo chmod -R 777 pub/ var/ generated/
 php bin/magento maintenance:disable
 
+Command to create admin user
+php bin/magento admin:user:create
+
+command to install magento2
+php bin/magento setup:install
